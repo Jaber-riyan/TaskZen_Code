@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+.swapy {
+  width: 200px;
+  height: 200px;
+  background-color: #93c5fd;
+  user-select: none;
+  margin-bottom: 8px;
+}
+
