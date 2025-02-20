@@ -1,12 +1,12 @@
 # Task Management Application
 
-[Task Management Application](https://taskzenn.netlify.app/) <!-- Add actual screenshot URL -->
+[TaskZen](https://taskzenn.netlify.app/) <!-- Add actual screenshot URL -->
 
 A modern task management solution built with React and Express.js, featuring real-time synchronization and intuitive drag-and-drop functionality.
 
 ## Live Demo
 
-[![Live Demo](https://taskzenn.netlify.app/)
+[Live Demo](https://taskzenn.netlify.app/)
 
 ## Features
 
