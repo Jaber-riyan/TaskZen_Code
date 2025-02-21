@@ -4,18 +4,13 @@ import { FaEdit, FaTrashAlt } from "react-icons/fa"; // Importing the edit and d
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-const TaskCard = ({ task, onDelete, onCategoryChange }) => {
+const TaskCard = ({ task, onDelete, setActiveCard, index }) => {
     const [selectedCategory, setSelectedCategory] = useState(task.category);
     const [slice, setSlice] = useState(true)
 
-    const handleCategoryChange = (e) => {
-        const newCategory = e.target.value;
-        setSelectedCategory(newCategory);
-        onCategoryChange(task._id, newCategory); // Passing updated category to parent
-    };
 
     return (
-        <div className="bg-white dark:bg-gray-800 dark:text-white shadow-lg rounded-xl p-5 transition-all flex flex-col gap-3 w-full min-h-[250px] flex-grow">
+        <div className="bg-white dark:bg-gray-800 dark:text-white shadow-lg rounded-xl p-5 transition-all flex flex-col gap-3 w-full flex-grow dark:shadow-[0_0_15px_#fff] cursor-grab active:border-2 active:border-white active:opacity-100" draggable onDragStart={() => setActiveCard(index)} onDragEnd={()=>setActiveCard(null)}>
             {/* Task Title */}
             <h3 className="text-xl font-bold flex items-center gap-2 flex-shrink-0">
                 <FaClipboardList className="text-blue-500 dark:text-blue-400" />
@@ -23,26 +18,25 @@ const TaskCard = ({ task, onDelete, onCategoryChange }) => {
             </h3>
 
             {/* Task Description */}
-            <p className="text-gray-600 dark:text-gray-300 text-sm flex-grow">
-                {slice ? task.description.slice(0, 60) || "No description provided." : task.description || "No description provided."}
-                <span onClick={() => setSlice(!slice)} className="font-semibold cursor-pointer italic">
+            <p className="text-gray-600 dark:text-gray-300 text-sm">
+                {slice ? task.description.slice(0, 10) || "No description provided." : task.description || "No description provided."}
+                <span onClick={() => setSlice(!slice)} className="font-semibold cursor-pointer italic ml-1 text-base">
                     {slice ? "see more..." : "see less..."}
                 </span>
             </p>
 
             {/* Category Dropdown */}
-            <div className="relative">
+            {/* <div className="relative">
                 <select
                     value={selectedCategory}
                     onChange={handleCategoryChange}
                     className="appearance-none bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-sm p-3 pr-10 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:ring-2 dark:ring-blue-500 transition-all duration-300"
                 >
-                    <option value="To-Do">To-Do</option>
+                    <option value="To Do">To Do</option>
                     <option value="In Progress">In Progress</option>
                     <option value="Done">Done</option>
                 </select>
 
-                {/* Custom dropdown arrow */}
                 <div className="absolute right-0 top-0 mt-3 mr-3">
                     <svg
                         className="w-4 h-4 text-white transform transition-transform duration-300 group-hover:rotate-180"
@@ -58,7 +52,7 @@ const TaskCard = ({ task, onDelete, onCategoryChange }) => {
                         />
                     </svg>
                 </div>
-            </div>
+            </div> */}
 
             {/* Timestamp */}
             <div className="flex items-center text-gray-500 dark:text-gray-400 text-base">

@@ -7,10 +7,12 @@ import { FaPlus } from "react-icons/fa";
 import "animate.css";
 import useAuth from "../../Hooks/UseAuth/UseAuth";
 import UseAxiosSecure from "../../Hooks/UseAxiosSecureAndNormal/UseAxiosSecure";
+import { useNavigate } from "react-router-dom";
 
 const AddTask = () => {
   const { register, handleSubmit, reset, formState: { errors }, setValue } = useForm();
   const axiosInstanceSecure = UseAxiosSecure();
+  const navigate = useNavigate()
 
   const [tasks, setTasks] = useState({
     maxLength: 50,
@@ -24,49 +26,42 @@ const AddTask = () => {
 
   const onSubmit = async (data) => {
     if (!data.title) {
-      // Show validation error if title is missing
       toast.error("Title is required!");
       return;
     }
 
-    const newTask = {
-      title: data.title,
-      description: data.description,
-      category: data.category,
-      timestamp: new Date().toISOString(),
-      userEmail: user?.email,
-      userName: user?.displayName
-    };
-    console.log(newTask);
-
     try {
-      const res = await axiosInstanceSecure.post("/tasks", newTask);
-      if (res.data.status) {
-        console.log("Task Data:", newTask);
+      // Fetch existing tasks to determine the order value
+      const res = await axiosInstanceSecure.get(`/tasks/${user?.email}`);
+      const existingTasks = res.data.data || [];
+      const newOrder = existingTasks.length + 1; // Set order based on count
+
+      const newTask = {
+        title: data.title,
+        description: data.description,
+        category: data.category,
+        timestamp: new Date().toISOString(),
+        order: newOrder, // Add order field
+        userEmail: user?.email,
+        userName: user?.displayName
+      };
+
+      const postRes = await axiosInstanceSecure.post("/tasks", newTask);
+      if (postRes.data.status) {
         Swal.fire({
           title: "Task Added!",
           text: "Your task has been added successfully.",
           icon: "success",
           confirmButtonText: "OK",
-          customClass: {
-            popup: "dark:bg-gray-800 dark:text-white",
-            title: "dark:text-white",
-            confirmButton: "dark:bg-blue-500 dark:text-white",
-          },
         });
+        navigate("/");
         reset();
-      }
-      else {
+      } else {
         Swal.fire({
           title: "",
           text: "Something went wrong! Please try again.",
           icon: "error",
           confirmButtonText: "OK",
-          customClass: {
-            popup: "dark:bg-gray-800 dark:text-white",
-            title: "dark:text-white",
-            confirmButton: "dark:bg-blue-500 dark:text-white",
-          },
         });
       }
     } catch (error) {
@@ -78,6 +73,7 @@ const AddTask = () => {
       });
     }
   };
+
 
   // Update task character count and validate
   const handleTaskChange = (e) => {
@@ -150,7 +146,7 @@ const AddTask = () => {
               {...register("category", { required: true })}
               className="w-full p-2 border rounded dark:bg-gray-700 dark:text-white"
             >
-              <option value="To-Do">To-Do</option>
+              <option value="To Do">To Do</option>
               <option value="In Progress">In Progress</option>
               <option value="Done">Done</option>
             </select>

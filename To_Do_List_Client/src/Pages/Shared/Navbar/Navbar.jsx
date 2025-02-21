@@ -3,7 +3,6 @@ import './Navbar.css';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 import useAuth from '../../../Hooks/UseAuth/UseAuth';
-import UseAdmin from '../../../Hooks/UseAdmin/UseAdmin';
 import UseTheme from '../../../Hooks/UseTheme/UseTheme';
 import { useEffect } from 'react';
 
